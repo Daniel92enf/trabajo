@@ -26,6 +26,17 @@
             $stmt->close();
             return $tarea;
         }
+
+        public function dameUnoPorUsuario($user=""){ //función que retorna un registro por medio de un user
+            $stmt = $this->mysqli->prepare("SELECT * FROM usuarios WHERE user=? ; "); // se prepara la consulta con prepare por medio de la conexión que tenemos
+            $stmt->bind_param('s', $user); // en lugar de la interrogación, coloque el valor de la variable user
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $tarea = $result->fetch_assoc();
+            $stmt->close();
+            return $tarea;
+        }
+
         public function dameLista(){ //esta función retorna una lista
             $result = $this->mysqli->query('SELECT * FROM tareas');
             $tareas = $result->fetch_all(MYSQLI_ASSOC); //aquí se ejecuta la consulta

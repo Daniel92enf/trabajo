@@ -34,12 +34,21 @@
         }
 
         function procesaListar(){
-            if(!isset($_GET['action'])){
-               die($this->response(404)); 
-            }
+        
             if($_GET['action']=='tareas'){ //se verifica la acción y se verifica que actúe sobre la tabla tareas
                 $tareasDB = new TareasDB();// aquí se instancia un objeto de la clase tareasdb
 
+                if(isset($_GET['id'])){ // se solicita un registro por id
+                    $response = $tareasDB->dameUnoPorId($_GET['id']);
+                    echo json_encode($response, JSON_PRETTY_PRINT);// aquí se muestra la información en formato json un registro por id
+                } else {
+                    $response = $tareasDB->dameLista(); // de lo contrario, manda la lista completa
+                    echo json_encode($response, JSON_PRETTY_PRINT); // muestra la lista en formato json
+                }
+            } else if ($_GET['login']=='tareas'){
+                
+                $tareasDB = new TareasDB();// aquí se instancia un objeto de la clase tareasdb
+                
                 if(isset($_GET['id'])){ // se solicita un registro por id
                     $response = $tareasDB->dameUnoPorId($_GET['id']);
                     echo json_encode($response, JSON_PRETTY_PRINT);// aquí se muestra la información en formato json un registro por id
@@ -65,6 +74,28 @@
                     $this->response(200,"success","new record added");
                 } else {
                     $this->response(422,"error","The property is not defined");
+                }
+            } else if($_GET['action']=='usuarios'){ // se comprueba que trabaja en la tabla tareas
+                $obj = json_decode( file_get_contents('php://input') );
+                $objArr = (array)$obj;
+                if (empty($objArr)){
+                    $this->response(422,"error","Mandame el usuario ome gonorrea ome");
+                } else if(isset($obj->user)&& isset($obj->password)){
+                    //return $this->response(422,"error",$obj->user);
+                    $tareasDB = new TareasDB();
+                    $response = $tareasDB->dameUnoPorUsuario($obj->user);
+                    if ($response && isset($response['user'])) {
+                        if($response['password'] == $obj->password){
+                            echo json_encode($response, JSON_PRETTY_PRINT);
+                        }else{
+                            $this->response(401, "error", "Contraseña incorrecta");    
+                        }
+                    
+                    } else {
+                        $this->response(404, "error", "Usuario no encontrado");
+                    }                   
+                } else {
+                    $this->response(422,"error","Debe ingresar usuario y contraseña");
                 }
             } else {
                 $this->response(400);

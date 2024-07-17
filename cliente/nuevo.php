@@ -2,7 +2,7 @@
     require_once "Rutas.php";
     $rutas = new Rutas();
     if(isset($_POST['titulo'])) {
-        $url = $rutas->dameUrlBase().'/servidor/tareas';
+        $url = $rutas->dameUrlBase().'/servidor/index.php?action=tareas';
         $data = array('titulo' => $_POST['titulo'], 'descripcion' => $_POST['descripcion'], 'prioridad' => $_POST['prioridad']);
         $postdata = json_encode($data);
         $ch = curl_init($url);

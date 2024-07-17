@@ -33,7 +33,7 @@
         echo "<td>".$registro['titulo']."</td>";
         echo "<td>".$registro['descripcion']."</td>";
         echo "<td>".$registro['prioridad']."</td>";
-        echo "<td>".$rutas->dameMenuModificar($registro['id'])."&nbsp;&nbsp;&nbsp;&nbsp;".$rutas->dameMenuEliminar($registro['id'])."</td>";
+        echo "<td>".$rutas->dameMenuModificar($registro['id'])."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$rutas->dameMenuEliminar($registro['id'])."</td>";
         echo "</tr>";
     }
 ?>
